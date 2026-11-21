@@ -63,5 +63,5 @@ Use this minimal shape in deck specs:
 - For retained PowerPoint templates, run `scripts/sanitize_pptx.py` before storing them if they contain client/private naming that should not appear in generated output.
 - For PowerPoint templates, run `scripts/catalog_layouts.py` and store both JSON and Markdown catalogs beside the brand.
 - Mark blank layouts as fallback-only; storyboard options should prefer designed template layouts with real structure.
-- For the bundled neutralized templates, Helvetica Neue regular is the default; remove inherited italic defaults.
-- Do not preserve source-brand names in sanitized template text, metadata, filenames, or output summaries.
+- For the bundled editorial templates, Helvetica Neue regular is the default; remove inherited italic defaults.
+- Naming substitution does not remove source logos or imagery. Keep provenance accurate and review rendered output before claiming brand neutrality.

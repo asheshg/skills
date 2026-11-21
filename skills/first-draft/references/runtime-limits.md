@@ -17,16 +17,22 @@ Check original files for omitted material. Empty notes or warnings are evidence 
 
 ## Rendering
 
-The PPTX helper preserves the selected template's masters and layout collection. It chooses a layout, then adds text and labeled visual placeholders at fixed widescreen positions. It does not automatically populate each layout's placeholder geometry, draw real charts/tables, place image files, or enforce content capacity. It currently keeps at most six body items and three evidence/footer entries; reject or split excess content before calling it. Speaker notes are currently added to visible footer content rather than PowerPoint's notes pane.
+The PPTX helper preserves template masters/layouts and scales its generated composition to the selected slide dimensions. It does not populate each layout's placeholder geometry or draw real charts/tables/images. It rejects more than six body items or three visible evidence entries; split dense slides. Speaker notes are stored in PowerPoint's notes pane. Pale visual placeholders use dark text in both themes.
 
-Verify an explicit template exists and is a real PPTX before rendering: the helper can otherwise fall back silently to the bundled default or a generic presentation. If the selected template is missing, report the problem instead of delivering a fallback as brand compliant. Review chosen layouts for relevance; the first nonblank layout is only a heuristic fallback. Inspect slides for inherited placeholders, overlap, contrast, and clipping. Preserved layouts alone do not demonstrate that the slide composition follows the template.
+Selected template paths must exist and be real PPTX ZIPs containing a presentation; missing paths and LFS pointers fail instead of falling back. With no selection, the bundled theme template is required. Output cannot overwrite the source template. Layout selection remains heuristic; inspect inherited shapes and text capacity before presenting.
+
+HTML brand colors must be six-digit hex values. Font-family values allow plain names, spaces, commas, quotes, periods and hyphens; CSS declarations, markup, escapes and URL functions are rejected before output is written. Visible text is HTML-escaped.
 
 The HTML helper produces a fixed 16:9 printable draft with text and visual-description placeholders. It does not reproduce PowerPoint layouts. Set the brand fonts explicitly. PDF requires a separate browser print/export step; do not report a PDF as generated until the PDF exists and has been checked.
 
-Treat both renderers as draft builders. For finished charts, imagery, template-specific composition, or real speaker notes, add those elements with an appropriate available tool and inspect the resulting artifact. Clearly label remaining placeholders and unverified visual fidelity at delivery.
+Treat both renderers as draft builders. For finished charts, imagery, or template-specific composition, add those elements with an appropriate available tool and inspect the resulting artifact. PowerPoint speaker notes come from each slide's `notes` field; the HTML helper does not render that field. Clearly label remaining placeholders and unverified visual fidelity at delivery.
 
 ## Optional integrations and books
 
 Figma Slides requires an available Figma Slides creation/editing tool; inspect current capabilities rather than assuming a particular tool name. If unavailable, offer an available format and obtain the user's format choice. Google Slides-compatible means PPTX import, not a native Google Slides file or guaranteed import fidelity.
 
 The references contain distilled book concepts. Full books and fonts are not distributed. Paths and access reports in `book-sources.md` describe the original author's machine and historical source inspection, not files guaranteed on a new installation. Retrieve the actual source when direct consultation is requested, and disclose unavailable books without inventing attribution.
+
+## Retained asset provenance
+
+The six editorial assets retain original SPACE10 artwork, even where text naming was substituted. The repository owner confirmed permission to redistribute them on 2026-11-21. They are not fully brand-neutral. Do not describe string replacement as removal of logos, images, or third-party rights. Use only layouts appropriate to the requested brand and visually review inherited artwork. See [asset review](../ASSET-REVIEW.md).

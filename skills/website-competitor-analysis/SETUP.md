@@ -40,4 +40,4 @@ Keep local brands and project outputs backed up separately. Review upstream chan
 
 ## Verification status
 
-These are reviewed installation instructions, not a claim that installation was performed. The 2026-11-21 review used source inspection and static file checks. Target scripts were not executed under the Skill Inspector review boundary. See [the security review](SECURITY-REVIEW.md).
+Source review was followed by authorized validator and live-browser tests on 2026-11-21. A copied installation still needs discovery checks in a new agent session. See [the security review](SECURITY-REVIEW.md); validator success does not establish full audit coverage or host discovery.

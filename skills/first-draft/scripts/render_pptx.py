@@ -12,6 +12,7 @@ import argparse
 import json
 import re
 from pathlib import Path
+import zipfile
 
 from pptx import Presentation
 from pptx.dml.color import RGBColor
@@ -58,18 +59,25 @@ def remove_template_slides(prs: Presentation) -> None:
 
 
 def resolve_template(spec: dict, explicit: str | None) -> Path | None:
+    theme = (spec.get("theme") or spec.get("brand", {}).get("theme") or "light").lower()
+    templates = spec.get("brand", {}).get("templates", {})
     candidates = [
         explicit,
         spec.get("template", {}).get("path") if isinstance(spec.get("template"), dict) else None,
         spec.get("brand", {}).get("template"),
-        spec.get("brand", {}).get("templates", {}).get("default") if isinstance(spec.get("brand", {}).get("templates"), dict) else None,
+        templates.get(theme) or templates.get("default") if isinstance(templates, dict) else None,
     ]
     for candidate in candidates:
-        if candidate and Path(candidate).exists():
-            return Path(candidate)
-    theme = (spec.get("theme") or spec.get("brand", {}).get("theme") or "light").lower()
+        if candidate:
+            path = Path(candidate)
+            if not path.is_file() or not zipfile.is_zipfile(path):
+                raise ValueError(f"Selected template is missing or not a PPTX ZIP: {path}")
+            with zipfile.ZipFile(path) as archive:
+                if "ppt/presentation.xml" not in archive.namelist():
+                    raise ValueError(f"Selected template has no presentation: {path}")
+            return path
     default = DEFAULT_DARK if theme == "dark" else DEFAULT_LIGHT
-    return default if default.exists() else None
+    return resolve_template({}, str(default))
 
 
 def layout_name(layout) -> str:
@@ -130,7 +138,7 @@ def add_bullets(slide, left, top, width, height, items, font_name, font_size, co
     frame = box.text_frame
     frame.clear()
     frame.word_wrap = True
-    for index, item in enumerate(items[:6]):
+    for index, item in enumerate(items):
         paragraph = frame.paragraphs[0] if index == 0 else frame.add_paragraph()
         paragraph.text = clean_text(item)
         paragraph.level = 0
@@ -154,7 +162,7 @@ def add_visual_placeholder(slide, left, top, width, height, visual, font_name, a
     paragraph.font.name = font_name
     paragraph.font.size = Pt(18)
     paragraph.font.italic = False
-    paragraph.font.color.rgb = text_color
+    paragraph.font.color.rgb = RGBColor(30, 30, 30)
 
 
 def add_footer(slide, evidence, font_name, text_color):
@@ -162,7 +170,7 @@ def add_footer(slide, evidence, font_name, text_color):
         return
     source_text = "; ".join(
         clean_text(f"{ev.get('source', '')} {ev.get('locator', '')}: {ev.get('claim', '')}")
-        for ev in evidence[:3]
+        for ev in evidence
     )
     add_textbox(slide, Inches(0.6), Inches(6.95), Inches(12.1), Inches(0.28), source_text, font_name, 7, text_color)
 
@@ -208,14 +216,20 @@ def populate_slide(slide, slide_spec: dict, spec: dict, slide_number: int) -> No
     else:
         add_bullets(slide, Inches(0.85), Inches(2.0), Inches(10.9), Inches(3.9), body, body_font, 19, text_color)
 
-    notes = slide_spec.get("notes")
     evidence = list(slide_spec.get("evidence", []))
-    if notes:
-        evidence.append({"source": "notes", "locator": "", "claim": notes})
+    if slide_spec.get("notes"):
+        slide.notes_slide.notes_text_frame.text = clean_text(slide_spec["notes"])
     add_footer(slide, evidence, body_font, RGBColor(90, 90, 90))
 
 
 def render(spec: dict, output: Path, template_path: Path | None) -> None:
+    if template_path and output.resolve() == template_path.resolve():
+        raise ValueError("Output must differ from the source template.")
+    if not spec.get("slides"):
+        raise ValueError("Deck spec has no slides.")
+    for item in spec["slides"]:
+        if len(item.get("body", [])) > 6 or len(item.get("evidence", [])) > 3:
+            raise ValueError("Split dense slides: maximum six body items and three visible evidence entries.")
     prs = Presentation(str(template_path)) if template_path else Presentation()
     if template_path:
         remove_template_slides(prs)
@@ -226,7 +240,19 @@ def render(spec: dict, output: Path, template_path: Path | None) -> None:
     for index, slide_spec in enumerate(spec.get("slides", []), start=1):
         layout = choose_layout(prs, slide_spec) if template_path else prs.slide_layouts[6]
         slide = prs.slides.add_slide(layout)
+        inherited = len(slide.shapes)
         populate_slide(slide, slide_spec, spec, index)
+        sx, sy = prs.slide_width / Inches(13.333), prs.slide_height / Inches(7.5)
+        for shape in list(slide.shapes)[inherited:]:
+            shape.left, shape.top = int(shape.left * sx), int(shape.top * sy)
+            shape.width, shape.height = int(shape.width * sx), int(shape.height * sy)
+            if shape.has_text_frame:
+                for paragraph in shape.text_frame.paragraphs:
+                    if paragraph.font.size is not None:
+                        paragraph.font.size = int(paragraph.font.size * min(sx, sy))
+                    for run in paragraph.runs:
+                        if run.font.size is not None:
+                            run.font.size = int(run.font.size * min(sx, sy))
 
     output.parent.mkdir(parents=True, exist_ok=True)
     prs.save(output)

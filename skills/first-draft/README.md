@@ -33,7 +33,7 @@ Research may include PDFs, DOCX, PPTX, Markdown, text, CSV/TSV, and images for v
 
 The local renderers are draft builders. Charts, tables, and images are labeled placeholders rather than completed visuals. PowerPoint content uses fixed positions rather than automatically filling every template layout. Verify spacing, inherited placeholders, contrast, font availability, and content completeness before presenting. See [runtime limits](references/runtime-limits.md).
 
-The bundled neutralized light/dark templates default to Helvetica Neue regular. Prefer relevant designed layouts; blank layouts are a last resort. A retained custom brand can supply its own fonts and template rules.
+The bundled editorial light/dark templates default to Helvetica Neue regular. Prefer relevant designed layouts; blank layouts are a last resort. A retained custom brand can supply its own fonts and template rules.
 
 ## Local helpers
 
@@ -52,7 +52,7 @@ For a new retained brand:
 python scripts/brand_store.py add "C:\path\brand-package" --name "Example Brand" --slug example-brand
 ```
 
-Adding the same slug replaces its folder unless `--merge` is supplied. `delete <slug>` removes the retained folder. Brand uploads are stored inside `sources/brands/<slug>/`; keep confidential uploads out of public commits. Selection happens in the conversation/deck spec, not through a separate CLI command.
+Adding an existing slug is refused. `--merge` adds new files and refuses collisions; it does not replace files. `delete <slug> --yes` explicitly confirms permanent removal of the retained folder. Back up retained brands first; a failed merge may leave newly copied files, while existing files are preserved. Brand uploads are stored inside `sources/brands/<slug>/`; keep confidential uploads out of public commits. Selection happens in the conversation/deck spec, not through a separate CLI command.
 
 ## References
 
@@ -67,3 +67,7 @@ Books, proprietary fonts, and the separate consulting skill are not bundled. Dis
 ## Maintenance and review
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY-REVIEW.md](SECURITY-REVIEW.md).
+
+## Verified safety and runtime behavior
+
+See [ASSET-REVIEW.md](ASSET-REVIEW.md) for full archive inspection and native rendering of all 317 retained asset slides. Original branded artwork remains with owner-confirmed redistribution permission. Nine regression checks cover the repaired write/render boundaries; run them from the shared repository root as documented in CONTRIBUTING.md.

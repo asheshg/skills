@@ -49,6 +49,8 @@ def clean_xml(text: str) -> str:
 
 
 def sanitize_pptx(source: Path, output: Path) -> None:
+    if source.resolve() == output.resolve():
+        raise ValueError("Sanitized output must differ from the source presentation.")
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(source, "r") as zin, zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as zout:
         for info in zin.infolist():
