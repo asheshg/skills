@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
+# Audit runs belong outside the reusable skill repository.
+output/
+evidence/
+tmp/
+browser-profile/
+
+.venv/

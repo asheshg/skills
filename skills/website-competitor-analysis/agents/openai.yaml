@@ -1,0 +1,4 @@
+interface:
+  display_name: "Website Audit and Competitor Benchmark"
+  short_description: "Evidence-led UX, WCAG, and deceptive-pattern audits"
+  default_prompt: "Use $website-competitor-analysis to audit the target website using separate Core UX, WCAG 2.2, deceptive-pattern, and Fair Patterns remediation frameworks. Ask for PPT, PDF, or HTML output, define and report each framework independently, validate screenshot annotations through the manifest, and benchmark competitors only where they outperform a supported target weakness on the same task."

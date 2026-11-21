@@ -1,0 +1,95 @@
+{
+  "audit": {
+    "target_site": "",
+    "target_url": "",
+    "capture_date": "YYYY-MM-DD",
+    "output_format": "HTML deck/report",
+    "scope": {
+      "pages": [],
+      "journeys": [],
+      "viewports": []
+    }
+  },
+  "frameworks": {
+    "core-ux": {
+      "state": "not-tested",
+      "limitations": []
+    },
+    "wcag-2.2-aa": {
+      "state": "not-tested",
+      "methods_completed": [],
+      "limitations": []
+    },
+    "deceptive-patterns": {
+      "state": "not-tested",
+      "retrieval_date": "YYYY-MM-DD",
+      "limitations": []
+    },
+    "fair-patterns": {
+      "state": "not-invoked",
+      "limitations": []
+    }
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "",
+      "site": "",
+      "url": "",
+      "journey_stage": "",
+      "viewport": "desktop 1440x1000",
+      "screenshot": "",
+      "screenshot_role": "target-gap",
+      "screenshot_dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "capture_date": "YYYY-MM-DD",
+      "placement_verified": false,
+      "findings": [
+        {
+          "pin": 1,
+          "x_percent": 0,
+          "y_percent": 0,
+          "element_bounds_percent": null,
+          "severity": "P1",
+          "target_gap": "",
+          "competitor_benchmark": "",
+          "same_task_verified": false,
+          "title": "",
+          "description": "",
+          "user_harm": "",
+          "recommendation": "",
+          "framework_results": [
+            {
+              "framework": "core-ux",
+              "code": "",
+              "result": "",
+              "level": "",
+              "evidence_type": "visual",
+              "verification_method": "manual screenshot review",
+              "reference": "",
+              "verified_by_human": true
+            }
+          ],
+          "remediations": [],
+          "evidence_type": "visual",
+          "verification_method": "manual screenshot review",
+          "source": "",
+          "confidence": "medium"
+        }
+      ]
+    }
+  ],
+  "qa": {
+    "all_framework_states_reported": false,
+    "all_competitor_findings_map_to_target_gaps": false,
+    "all_pins_match_table_rows": false,
+    "all_sources_visible": false,
+    "all_framework_claims_referenced": false,
+    "all_supported_deceptive_patterns_human_verified": false,
+    "all_supported_deceptive_patterns_have_remediation": false,
+    "one_screenshot_per_evidence_slide": false,
+    "all_pin_placements_render_checked": false
+  }
+}
