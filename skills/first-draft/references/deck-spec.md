@@ -75,5 +75,5 @@ Use this schema as the normalized handoff between research, storyboard, and rend
 - Left-align body text. Avoid centered body copy except for cover, divider, quote, or closing slides.
 - Use brand-token colors only.
 - Use ASCII hyphens only; do not use em dashes or en dashes.
-- For bundled neutralized templates, use Helvetica Neue regular by default and avoid italic unless explicitly requested.
+- For bundled editorial templates, use Helvetica Neue regular by default and avoid italic unless explicitly requested.
 - Do not mention source-template brand names anywhere in generated output.

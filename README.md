@@ -25,3 +25,5 @@ Both skills are normal folders in this repository, not Git submodules. Original 
 Git LFS is required for the bundled PowerPoint files. Existing third-party rights and per-skill licenses still apply; this repository does not grant a new blanket license. See each skill's review before use.
 
 See [MIGRATION.md](MIGRATION.md) for source commits, exclusions, verification, and remaining risks.
+
+See [TESTING.md](TESTING.md) for repository checks and [SCANNER-SETUP.md](SCANNER-SETUP.md) for the reviewed scanner setup.

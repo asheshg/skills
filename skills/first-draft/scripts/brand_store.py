@@ -7,6 +7,7 @@ import argparse
 import json
 import re
 import shutil
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -29,7 +30,16 @@ def load_manifest() -> dict:
 
 def save_manifest(data: dict) -> None:
     BRANDS_DIR.mkdir(parents=True, exist_ok=True)
-    MANIFEST.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+    payload = json.dumps(data, indent=2, sort_keys=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=BRANDS_DIR, delete=False) as handle:
+            temporary = Path(handle.name)
+            handle.write(payload)
+        temporary.replace(MANIFEST)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def list_brands(_: argparse.Namespace) -> None:
@@ -47,29 +57,43 @@ def add_brand(args: argparse.Namespace) -> None:
         raise SystemExit(f"Source not found: {source}")
     slug = slugify(args.slug or args.name or source.stem)
     target = BRANDS_DIR / slug
+    if target.is_symlink() or target.resolve().parent != BRANDS_DIR.resolve():
+        raise SystemExit("Brand destination must be a real folder inside the brand store.")
+    if source == target.resolve() or source.is_relative_to(target.resolve()) or target.resolve().is_relative_to(source):
+        raise SystemExit("Brand source and destination must not overlap.")
+    incoming = list(source.rglob("*")) if source.is_dir() else [source]
+    if any(item.is_symlink() or not item.resolve().is_relative_to(source) for item in incoming):
+        raise SystemExit("Brand source must not contain symbolic links.")
     if target.exists() and not args.merge:
-        shutil.rmtree(target)
+        raise SystemExit("Brand already exists; choose a new slug or use --merge to add new files.")
+    for item in incoming:
+        relative = item.relative_to(source) if source.is_dir() else Path(source.name)
+        destination = target / relative
+        if (destination.is_symlink() or not destination.resolve().is_relative_to(target.resolve())
+                or (destination.exists() and not (item.is_dir() and destination.is_dir()))):
+            raise SystemExit(f"Merge would overwrite an existing path: {destination}")
+    data = load_manifest()
+    previous = next((brand for brand in data["brands"] if brand["slug"] == slug), {})
+    # shortcut: failed merges can leave new files; use staged directory swaps if rollback is required.
     target.mkdir(parents=True, exist_ok=True)
     if source.is_dir():
         for child in source.iterdir():
             destination = target / child.name
             if child.is_dir():
-                if destination.exists():
-                    shutil.rmtree(destination)
-                shutil.copytree(child, destination)
+                shutil.copytree(child, destination, dirs_exist_ok=True)
             else:
                 shutil.copy2(child, destination)
     else:
         shutil.copy2(source, target / source.name)
-    data = load_manifest()
     now = datetime.now(timezone.utc).isoformat()
     data["brands"] = [b for b in data["brands"] if b["slug"] != slug]
     data["brands"].append({
+        **previous,
         "slug": slug,
-        "name": args.name or source.stem,
+        "name": args.name or previous.get("name") or source.stem,
         "path": f"sources/brands/{slug}",
         "updated_at": now,
-        "notes": args.notes or "",
+        "notes": args.notes or previous.get("notes", ""),
     })
     data["brands"].sort(key=lambda item: item["slug"])
     save_manifest(data)
@@ -77,8 +101,14 @@ def add_brand(args: argparse.Namespace) -> None:
 
 
 def delete_brand(args: argparse.Namespace) -> None:
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.slug):
+        raise SystemExit("Use the exact retained brand slug for deletion.")
     slug = slugify(args.slug)
     target = BRANDS_DIR / slug
+    if not args.yes:
+        raise SystemExit("Deletion requires --yes after confirming the brand and backing it up.")
+    if target.is_symlink() or target.resolve().parent != BRANDS_DIR.resolve():
+        raise SystemExit("Brand destination must be a real folder inside the brand store.")
     if target.exists():
         shutil.rmtree(target)
     data = load_manifest()
@@ -99,11 +129,12 @@ def main() -> None:
     add_parser.add_argument("--name")
     add_parser.add_argument("--slug")
     add_parser.add_argument("--notes")
-    add_parser.add_argument("--merge", action="store_true", help="Merge into an existing brand folder instead of replacing it.")
+    add_parser.add_argument("--merge", action="store_true", help="Add new files to an existing brand; refuse overwrites.")
     add_parser.set_defaults(func=add_brand)
 
     delete_parser = sub.add_parser("delete")
     delete_parser.add_argument("slug")
+    delete_parser.add_argument("--yes", action="store_true", help="Confirm permanent deletion of this retained brand.")
     delete_parser.set_defaults(func=delete_brand)
 
     args = parser.parse_args()

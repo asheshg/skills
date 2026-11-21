@@ -30,7 +30,7 @@ python -m venv .venv
 
 Use that interpreter for the helper commands in README.md. Dependency installation accesses the configured Python package index. The requirement versions are lower bounds, not a reproducible lockfile.
 
-Clone `https://github.com/asheshg/skills.git` into a working directory and run the copy procedure from that repository's root. Both skills are under `skills/`; neither is the repository root. The previous standalone repository is retained for history, not the destination for these updates.
+Clone `https://github.com/asheshg/skills.git` into a working directory, run `git lfs pull` there, and run the copy procedure from that repository's root. Both skills are under `skills/`; neither is the repository root. The previous standalone repository is retained for history, not the destination for these updates.
 
 Confirm that the bundled light/dark PPTX files are ZIP presentations, not LFS pointer text. Install a licensed Helvetica Neue font or agree on a substitute. Books and the optional consulting skill are not included. Figma Slides requires a connected Figma tool; PDF needs a separate export tool.
 
@@ -40,4 +40,4 @@ Keep local brands and project outputs backed up separately. Review upstream chan
 
 ## Verification status
 
-These are reviewed installation instructions, not a claim that installation was performed. The 2026-11-21 review used source inspection and static file checks. Target scripts were not executed under the Skill Inspector review boundary. See [the security review](SECURITY-REVIEW.md).
+Source review was followed by authorized runtime tests on 2026-11-21. See [the security review](SECURITY-REVIEW.md) for source, rendering and asset evidence. A copied installation still needs discovery checks in a new agent session; source validation alone does not establish that the host loaded it.

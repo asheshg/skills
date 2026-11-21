@@ -1,5 +1,7 @@
 # Skill Inspector review: Website Competitor Analysis
 
+## Historical static review
+
 Date: 2026-11-21. Source: local `skills/website-competitor-analysis`, including pre-existing uncommitted changes. This is a separate Git checkout, published as `asheshg/website-competitor-analysis`; its local origin still uses the redirected old owner URL. Published main was verified at `0e7d39cfd6f668ba1983610bd0c20081689c4812`. It has the older combined assessment framework, no validator, and no split WCAG/deceptive/fair framework references. The reviewed local version is ahead of that publication.
 
 **Verdict: CAUTION.** The skill's browser access and evidence capture fit its purpose, but require user-authorized interactions, private-data redaction, and human review of published deceptive-pattern findings.
@@ -43,3 +45,7 @@ Raw scan: `review-artifacts/website-competitor-analysis-skillspector.json` in th
 The shared repository contains only skill source, references, agent metadata, and bundled brand assets. Nested Git metadata, Python caches, smoke outputs, empty working assets, and local tools are excluded. Earlier scans describe the original working folders; the clean migrated folders are rescanned separately.
 
 The migrated scan adds P6 and MP3 occurrences in this review's explanation table at lines 35-36. They quote the original matches for triage, not executable instructions. The original P6/MP3 source locations and the LP3 warning remain unchanged. The numeric recommendation is retained above; the manual CAUTION verdict reflects this source-aware review and is not a replacement scanner score.
+
+## Subsequent authorized runtime validation — 2026-11-21
+
+The static-review statements above describe the earlier review stage and original standalone publication. The current source is maintained in asheshg/skills under skills/website-competitor-analysis. Subsequently, the validator self-test and a completed PwC annotation manifest passed, and the generated HTML report was rendered with annotation placement checked. Authorized desktop/mobile visits covered the PwC global homepage and its linked AI page, necessary-only cookies, and navigation/search panels. No forms were submitted. This was a scoped audit, not full WCAG or screen-reader certification. Fresh installation/discovery and a repaired-input scanner run remain separate release checks; historical scanner scores above do not describe those results.

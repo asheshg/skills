@@ -6,11 +6,18 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 from pathlib import Path
 
 
 def esc(value: object) -> str:
     return html.escape(str(value or ""))
+
+
+def css_value(value: str, pattern: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(pattern, value):
+        raise ValueError("Invalid brand CSS value; use hex colors and plain font-family names.")
+    return value
 
 
 def main() -> None:
@@ -23,12 +30,13 @@ def main() -> None:
     brand = spec.get("brand", {})
     colors = brand.get("colors", {})
     fonts = brand.get("fonts", {})
-    primary = colors.get("primary", "#111111")
-    accent = colors.get("accent", "#0A66CC")
-    bg = colors.get("background", "#FFFFFF")
-    text = colors.get("text", "#111111")
-    heading = fonts.get("heading", "Aptos Display, Arial, sans-serif")
-    body_font = fonts.get("body", "Aptos, Arial, sans-serif")
+    primary, accent, bg, text = [css_value(colors.get(key, default), r"#[0-9a-fA-F]{6}")
+        for key, default in (("primary", "#111111"), ("accent", "#0A66CC"),
+                             ("background", "#FFFFFF"), ("text", "#111111"))]
+    heading, body_font = [css_value(fonts.get(key, "Helvetica Neue, Arial, sans-serif"),
+                                   r"[\w ,.'\"-]+") for key in ("heading", "body")]
+    if not spec.get("slides"):
+        raise ValueError("Deck spec has no slides.")
 
     slides = []
     for index, slide in enumerate(spec.get("slides", []), start=1):
