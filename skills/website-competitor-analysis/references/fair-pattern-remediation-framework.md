@@ -42,4 +42,4 @@ Success evidence:
 Reference:
 ```
 
-Do not create a Fair Patterns chapter when there are no supported deceptive findings. State `not invoked: no supported deceptive-pattern finding` in the framework map.
+Link remedies for supported findings in the Deceptive-Pattern Summary. When none are supported, record Fair Patterns as `not-invoked` in the manifest.

@@ -38,7 +38,7 @@ Reference:
 
 Use `risk` when evidence suggests a barrier but interaction or assistive-technology verification is incomplete. Use `pass-observed` only for the exact page, state, and method tested.
 
-## Coverage Slide
+## Accessibility Pass Rate slide
 
 Show:
 
@@ -48,4 +48,12 @@ Show:
 - methods completed and omitted;
 - limitations, especially missing keyboard or assistive-technology testing.
 
-If any applicable criteria remain `not-tested`, label the result a partial WCAG audit and do not use `compliant`, `conformant`, or `passes WCAG` for the site.
+If any applicable criterion remains unresolved, label the result a partial WCAG audit. Keep every criterion in the rollup, with a reason for each `not-applicable` result.
+
+## Reflow and pass rate
+
+For 1.4.10, test vertically scrolling content at an effective width of 320 CSS pixels. Record configured width, viewport width, document client width, scroll width and zoom. Account for scrollbars, identify the element causing overflow and check for lost content or controls, required scrolling in two directions and component-specific exceptions. Clipping observed only below 320 CSS pixels can be a narrow-layout UX issue. Keep unresolved criterion tests as risk or not tested. Apply the 256 CSS pixel height condition to horizontally scrolling content.
+
+Roll up each A/AA criterion once for the declared sample. A confirmed failure takes precedence. Count a pass only when all required checks on applicable sampled states support it. Calculate sample pass rate as passes / (passes + failures). Calculate coverage as (passes + failures) / (registry total − confirmed not applicable). Show the counts for passes, failures, risks, untested and not applicable. If zero results are resolved, show insufficient evidence for pass rate. If zero criteria are applicable, show coverage as not applicable.
+
+[W3C Reflow guidance](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html)

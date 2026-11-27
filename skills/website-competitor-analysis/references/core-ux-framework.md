@@ -1,6 +1,6 @@
 # Core UX Audit Framework
 
-Use this framework for usability, information, interface, navigation, interaction, and visual-design findings. It is the only authority for Core UX parameter codes. A short audit selects a subset of these codes; it never creates or redefines codes.
+Use this framework for usability, information, interface, navigation, interaction, and visual-design findings. It is the only authority for Core UX parameter codes. Assess applicable parameters in each state. The presentation always includes the full baseline below, in source order, even when a short audit tests a subset.
 
 ## Status And Scoring
 
@@ -16,70 +16,64 @@ Score observed Core UX parameters from 1-5 and explain each score with evidence:
 
 Do not average away severe outliers.
 
-## Canonical Parameters
+## Canonical parameters
 
-| Area | Code | Parameter | What to inspect |
+The baseline reproduces the two website assessment tables on pages 29?30 of the Tata CLiQ UI/UX Audit. Preserve the headers, row order, group labels, codes, names and descriptions. Blank area cells continue the preceding group. In the deck, group those cells vertically as in the reference.
+
+### 1/2
+
+| Area of focus | Code | Parameter | Description |
 |---|---|---|---|
-| Visual design | VD1 | Contrast and Readability | Text and imagery remain legible against their backgrounds. |
-| Visual design | VD2 | Number of Colours Used | A controlled palette supports hierarchy and meaning. |
-| Visual design | VD3 | Alignment of Elements | Text, headings, images, controls, and containers align consistently. |
-| Visual design | VD4 | Visual Balance | Text, imagery, controls, and whitespace have intentional visual weight. |
-| Visual design | VD5 | Use of White Space | Spacing separates groups and supports scanning. |
-| Visual design | VD6 | Visual Differentiation | Important content is distinct without visual clutter. |
-| Visual design | VD7 | Status Cues | States, progress, selection, and feedback are visible. |
-| Information design | IN1 | Information Gathering | Required technical and commercial information is available. |
-| Information design | IN2 | Personalized Suggestions | Recommendations use relevant, consented context and remain explainable. |
-| Information design | IN3 | Promotions and Offers | Offers are findable, understandable, and consolidated where useful. |
-| Information design | IN4 | FAQs | FAQs address recurring questions and decision barriers. |
-| Information design | IN5 | Guided Tutorials | Complex tasks receive suitable step-by-step guidance. |
-| Information design | IN6 | Data Validation | Inputs are validated close to the point of entry. |
-| Information design | IN7 | Error Messages | Errors explain the problem and recovery action. |
-| Information design | IN8 | Status Notifications | Users receive timely, relevant status updates. |
-| Information design | IN9 | Rich Media and Social Proof | Media and proof improve understanding and credibility. |
-| Information architecture | IA1 | Nomenclature | Labels are consistent, specific, and familiar to users. |
-| Information architecture | IA2 | Organization | Related options and content are grouped in a logical hierarchy. |
-| Information architecture | IA3 | Visibility and Accessibility | Important information is available at the point of need. |
-| Interface design | IF1 | Consistency | Components and controls behave consistently across pages and platforms. |
-| Interface design | IF2 | Responsive | Layout, images, and controls work across supported viewports and browsers. |
-| Interface design | IF3 | Aesthetic and Minimal | The interface excludes irrelevant or rarely needed content. |
-| Navigation design | ND1 | Headers and Navigation | Global navigation, logos, and headers remain predictable. |
-| Navigation design | ND2 | Dynamic Search and Cross-Category Results | Search supports intent, suggestions, and useful result recovery. |
-| Navigation design | ND3 | Navigation Menu Location | Primary navigation remains visible and predictable. |
-| Navigation design | ND4 | Product Categorization | Categories and filters match user shopping or decision models. |
-| Navigation design | ND5 | Backward Navigation | Users can return, undo, or move backward without losing context. |
-| Navigation design | ND6 | Progress Indicators | Multi-step processes expose location, progress, and remaining work. |
-| Interaction design | ID1 | Active Wording | Labels and CTA language describe actions clearly. |
-| Interaction design | ID2 | Transitions | Motion and state changes are smooth, contextual, and non-blocking. |
-| Interaction design | ID3 | Error Prevention | Risky actions include prevention, constraints, or confirmation. |
-| Interaction design | ID4 | Control Element | Choices use controls appropriate to their behavior and cardinality. |
+| Visual design | VD1 | Contrast and Readability | Text colours that contrast well with background |
+|  | VD2 | Number of Colours used | Limited number of colours used (best practice is to use 3 to 4) |
+|  | VD3 | Alignment of Elements | Alignment of elements (text, headers, images, boxes, etc.) |
+|  | VD4 | Visual Balance | Balance between amount of text and images (i.e., screens/pages are illustrative and informative) |
+|  | VD5 | Use of White Space | Optimal use of white space (e.g. left and right margins are not too wide, uncondensed text) |
+|  | VD6 | Visual Differentiation | Clear distinction between elements to avoid visual clutter and highlight key content. |
+|  | VD7 | Status Cues | Clear indicators for different states (e.g., added to cart, applied offers) |
+| Information design | IN1 | Information Gathering | Available technical and commercial information on all products and services in portfolio |
+|  | IN2 | Personalized Suggestions | Recommended products and services based on personal information collected |
+|  | IN3 | Promotions and Offers | Consolidated section on website with promotions and offers on products and services |
+|  | IN4 | FAQs | Comprehensive FAQs addressing top complaints |
+|  | IN5 | Guided Tutorials | Video or screenshot tutorials guiding customers step-by-step |
+|  | IN6 | Data Validation | Validating data entry at every step to avoid cumulative error |
+|  | IN7 | Error Messages | Appropriate error and recovery messages |
+|  | IN8 | Status Notifications | Proactive customers notifications through email or SMS about the status of their application |
+|  | IN9 | Rich Media & Social Proof | Product preview videos and customer reviews for better engagement and credibility. |
 
-## Parameter Definition Slide
+### 2/2
 
-Before detailed findings, define every Core UX code used later with:
-
-```text
-Code:
-Parameter:
-Plain-language definition:
-What good looks like:
-Common failure pattern:
-Related Nielsen heuristic:
-```
-
-Detailed decks use the complete canonical list. Short audits may show only the selected canonical codes.
+| Area of focus | Code | Parameter | Description |
+|---|---|---|---|
+| Information Architecture | IA1 | Nomenclature | Consistent and appropriate labelling |
+|  | IA2 | Organization | Hierarchy and Grouping of similar elements/options in a logical order - chronological, alphabetical, sequential |
+|  | IA3 | Visibility & Accessibility | Ensuring important information (e.g., delivery timelines, stock availability) is immediately accessible. |
+| Interface design | IF1 | Consistency | Consistent user interface across platforms and seamless experience across all use cases |
+|  | IF2 | Responsive | Support for major browsers, use of adaptive images and adaptability to screen specific resolutions |
+|  | IF3 | Aesthetic & Minimal | Interface should not contain information which is irrelevant or rarely needed |
+| Navigation design | ND1 | Headers & Navigation | Consistent headers, logos, and navigation elements across screens/pages, with easy ability to go back without losing progress. |
+|  | ND2 | Dynamic Search & Cross-Category Results | Intuitive and dynamic suggested searches (e.g., auto-completion based on click-through analysis, natural language processing incl. error correction and predictive result generation) |
+|  | ND3 | Navigation Menu Location | Static and visible navigation menu on all pages |
+|  | ND4 | Product Categorization | Filtering options for devices and services based on brand, recommended products, price, new products, op. system, star rating, best-selling, and special promotional offers |
+|  | ND5 | Backward Navigation | Consistent backward navigation ability |
+|  | ND6 | Progress Indicators | Visual elements to depict progress within a process |
+| Interaction design | ID1 | Active Wording | Active wording using colours and layout to promote user transactions (e.g. call-to-action buttons) |
+|  | ID2 | Transitions | Smooth & Contextual animations |
+|  | ID3 | Error Prevention | Helpful messages in error-prone areas, confirmation options |
+|  | ID4 | Control Element | Using appropriate control elements for choices |
 
 ## Nielsen Heuristic Cross-Check
 
-Map relevant findings to the ten Nielsen heuristics: system status; real-world match; user control; consistency; error prevention; recognition over recall; flexibility; minimalist design; error recovery; help and documentation.
+Cross-check each reviewed screen against the applicable Nielsen heuristics: system status; real-world match; user control; consistency; error prevention; recognition over recall; flexibility; minimalist design; error recovery; help and documentation.
 
 Source: `https://www.nngroup.com/articles/ten-usability-heuristics/`
 
-Optional adjacent skills may deepen this lens when installed:
+Use the two review skills when installed. When unavailable, use the principles listed here and record the fallback:
 
 - `$nielsen-heuristics-audit` for a systematic heuristic evaluation.
 - `$don-norman-principles-audit` for discoverability, affordances, signifiers, feedback, mapping, constraints, and conceptual models.
 
-Keep this skill as the report orchestrator and map adjacent-skill findings back to the canonical codes above.
+Use Don Norman?s principles to inspect discoverability, affordances, signifiers, feedback, mapping, constraints and conceptual models. Keep the Tata CLiQ baseline as the source of deck codes. Record Nielsen and Norman mappings in the test log without adding columns or a separate benchmark to the deck.
 
 ## Target-Gap Logic
 

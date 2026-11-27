@@ -1,92 +1,11 @@
-# Screenshot Annotation Playbook
+# Screenshot annotation
 
-The manifest is the evidence contract; this file owns capture and placement rules.
+Preserve raw desktop and mobile captures for each reported screen. Store the desktop capture in the primary slide fields and mobile in `mobile_capture`. If one size is blocked, use the available image as the primary capture, omit `mobile_capture` and record `capture_limit`. Record the URL, state, viewport, natural image dimensions, capture date and method.
 
-## Capture
+Generate marker numbers and table rows from the same finding records. Use numbered Tata CLiQ-style pins for visible evidence. Annotate both images in a desktop/mobile pair. Reuse the same pin number where both show the same issue and use separate numbered rows for distinct issues. When a finding is device-specific, pin it only where the evidence shows it and keep the other capture as context. Each pin must support its linked row. Apply Westside outlines only when explicitly requested. Keep description text in the table.
 
-Capture the target journeys first. Capture competitors only after a supported target weakness exists.
+Store each marker’s coordinates as percentages of its source image width and height. Use the finding’s `x_percent` and `y_percent` for the primary capture and `mobile_pin` with the same keys for the second capture. Set primary coordinates to null when a finding appears only in the second capture. Leave `mobile_pin` null when evidence appears only in the primary capture. If a claim needs more than one state, link the captures under the same finding. Keep non-visual evidence in the test record or summary.
 
-Prefer `$browse` when available:
+Fit captures in square-cornered frames without cropping or stretching and inspect every rendered evidence slide at presentation size. Check that each pin touches its intended element, each number matches its row, and sources and text are readable. Set `placement_verified` after inspection.
 
-```bash
-$B goto <url>
-$B viewport 1440x1000
-$B snapshot -o <out-dir>/<site>-<page>-desktop.png
-$B ux-audit
-$B console --errors
-$B perf
-```
-
-Raw `snapshot -i -a -C` labels may support analysis but must not appear in the client deck. If `$browse` is unavailable, use equivalent browser automation and disclose the substitute.
-
-For each source screenshot, record the URL, page/state, viewport, natural width and height, capture date, method, and cleanup. If content was removed or altered for legibility, preserve the raw screenshot and disclose the change.
-
-## One-Screenshot Rule
-
-- Every evidence slide has exactly one source screenshot.
-- Do not use screenshot groups, collages, or before/after composites as one evidence figure.
-- Framework, summary, and source slides may be text-only.
-- If two states are required to prove a finding, use two evidence slides and link them by finding ID.
-
-## Pins
-
-- Use numbered rounded pins only.
-- Do not use highlight boxes, callout rectangles, arrows, or text overlays on screenshots.
-- Put each pin on or immediately beside the exact visible element described by its row.
-- Store pin coordinates relative to the screenshot's natural dimensions, then convert to percentages.
-- Record optional element bounds when the finding concerns a control or bounded region.
-- Keep pin numbers unique within a slide and identical to the findings-table numbers.
-
-Coordinate conversion:
-
-```text
-x_percent = element_center_x / screenshot_natural_width * 100
-y_percent = element_center_y / screenshot_natural_height * 100
-```
-
-## Source Line
-
-Every finding row uses:
-
-```text
-Source: <site and page/state>, <viewport>, captured <YYYY-MM-DD>, <capture method and limitation>
-```
-
-Use neutral examples only:
-
-```text
-Source: example.com product page, desktop 1440x1000, captured YYYY-MM-DD, browser automation
-```
-
-## Placement Verification
-
-After rendering the PPT or HTML deck:
-
-1. Open each evidence slide at presentation size.
-2. Confirm the screenshot has not been cropped or stretched.
-3. Confirm every pin touches the intended element and no other element.
-4. Confirm pin numbers match table rows.
-5. Confirm text and sources are readable without overlap.
-6. Set `placement_verified: true` only after this check.
-
-If the screenshot's crop or aspect ratio changes, recalculate positions. Do not nudge pins by eye without recording the corrected coordinates in the manifest.
-
-## Framework Evidence
-
-- Core UX annotations use a canonical parameter from `core-ux-framework.md`.
-- WCAG annotations identify the criterion, level, status, test method, and reference.
-- Deceptive-pattern annotations identify the canonical ID, choice set, status, counter-evidence, harm, source alias, and human verification.
-- Fair Pattern remediation remains in the findings table or remediation chapter; it is not a separate visual pin.
-- Non-visual claims belong in coverage, limitations, or recommendations, not on a screenshot.
-
-## Competitor Evidence
-
-A competitor annotation is valid only when the manifest records:
-
-- the supported target gap;
-- the same user task;
-- the same journey stage;
-- the competitor behavior that is demonstrably better;
-- the transferable pattern and target recommendation.
-
-Generic praise or visual inspiration is not benchmark evidence.
+For supplied heuristics, record the source in `frameworks.core-ux.parameter_source` and list the exact selected codes in `parameter_codes`. Leave both empty to use the built-in Core UX registry. Every Core UX finding must reference a code from the selected set.

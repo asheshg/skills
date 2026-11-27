@@ -31,6 +31,21 @@ def registry() -> dict[str, set[str]]:
     }
 
 
+def valid_dimensions(capture: dict) -> bool:
+    dimensions = capture.get("screenshot_dimensions")
+    return isinstance(dimensions, dict) and all(
+        type(dimensions.get(axis)) is int and dimensions[axis] > 0
+        for axis in ("width", "height")
+    )
+
+
+def valid_coordinates(pin: dict) -> bool:
+    return isinstance(pin, dict) and all(
+        type(pin.get(axis)) in (int, float) and 0 <= pin[axis] <= 100
+        for axis in ("x_percent", "y_percent")
+    )
+
+
 def validate(data: dict) -> list[str]:
     errors: list[str] = []
     codes = registry()
@@ -39,37 +54,67 @@ def validate(data: dict) -> list[str]:
         state = frameworks.get(name, {}).get("state")
         if state not in FRAMEWORK_STATES:
             errors.append(f"frameworks.{name}.state is invalid: {state!r}")
+    core_ux = frameworks.get("core-ux", {})
+    parameter_codes = core_ux.get("parameter_codes", [])
+    parameter_source = core_ux.get("parameter_source", "")
+    if parameter_codes or parameter_source:
+        if (
+            not isinstance(parameter_source, str) or not parameter_source.strip()
+            or not isinstance(parameter_codes, list) or not parameter_codes
+            or any(not isinstance(code, str) or not code.strip() for code in parameter_codes)
+        ):
+            errors.append("supplied Core UX parameters require a source and nonempty code strings")
+        else:
+            codes["core-ux"] = set(parameter_codes)
     fair_state = frameworks.get("fair-patterns", {}).get("state")
     if fair_state not in FRAMEWORK_STATES | {"not-invoked"}:
         errors.append(f"frameworks.fair-patterns.state is invalid: {fair_state!r}")
 
     slides = data.get("slides", [])
-    if not slides:
+    paired = data.get("audit", {}).get("evidence_format") == "paired"
+    if not slides and not paired:
         errors.append("slides must contain at least one evidence slide")
     for slide in slides:
         label = f"slide {slide.get('slide', '?')}"
         if slide.get("screenshot_role") not in SCREENSHOT_ROLES:
             errors.append(f"{label}: invalid screenshot_role")
-        dims = slide.get("screenshot_dimensions", {})
-        if not isinstance(dims.get("width"), int) or dims.get("width", 0) <= 0:
-            errors.append(f"{label}: screenshot width must be a positive integer")
-        if not isinstance(dims.get("height"), int) or dims.get("height", 0) <= 0:
-            errors.append(f"{label}: screenshot height must be a positive integer")
+        if not valid_dimensions(slide):
+            errors.append(f"{label}: screenshot dimensions must be positive integers")
+
+        paired_target = paired and slide.get("screenshot_role") == "target-gap"
+        mobile = slide.get("mobile_capture") if paired_target else None
+        if paired_target:
+            fields = ("url", "viewport", "screenshot", "capture_date", "verification_method")
+            if not all(slide.get(field) for field in fields):
+                errors.append(f"{label}: incomplete primary capture")
+            if not slide.get("findings"):
+                errors.append(f"{label}: target evidence slide requires a finding")
+            if mobile is None:
+                if not slide.get("capture_limit"):
+                    errors.append(f"{label}: record a second capture or capture_limit")
+            elif not isinstance(mobile, dict) or not all(mobile.get(field) for field in fields):
+                errors.append(f"{label}: incomplete mobile capture")
+            elif not valid_dimensions(mobile):
+                errors.append(f"{label}: invalid mobile screenshot dimensions")
+            elif mobile["screenshot"] == slide.get("screenshot"):
+                errors.append(f"{label}: captures must use distinct screenshots")
 
         pins: set[int] = set()
         for finding in slide.get("findings", []):
             pin = finding.get("pin")
             prefix = f"{label}, pin {pin!r}"
-            if not isinstance(pin, int) or pin < 1:
+            if type(pin) is not int or pin < 1:
                 errors.append(f"{prefix}: pin must be a positive integer")
             elif pin in pins:
                 errors.append(f"{prefix}: duplicate pin")
             else:
                 pins.add(pin)
-            for axis in ("x_percent", "y_percent"):
-                value = finding.get(axis)
-                if not isinstance(value, (int, float)) or not 0 <= value <= 100:
-                    errors.append(f"{prefix}: {axis} must be between 0 and 100")
+            mobile_pin = finding.get("mobile_pin") if paired_target else None
+            if mobile_pin is not None and (not mobile or not valid_coordinates(mobile_pin)):
+                errors.append(f"{prefix}: mobile_pin requires a mobile capture and valid coordinates")
+            mobile_only = mobile_pin is not None and finding.get("x_percent") is None and finding.get("y_percent") is None
+            if not mobile_only and not valid_coordinates(finding):
+                errors.append(f"{prefix}: x_percent and y_percent must be between 0 and 100")
             for field in ("title", "description", "recommendation", "source"):
                 if not finding.get(field):
                     errors.append(f"{prefix}: missing {field}")
@@ -153,6 +198,32 @@ def self_test() -> int:
     assert validate(data) == []
     data["slides"][0]["findings"][0]["x_percent"] = 101
     assert any("x_percent" in error for error in validate(data))
+    data["audit"] = {"evidence_format": "paired"}
+    slide = data["slides"][0]
+    finding = slide["findings"][0]
+    assert any("capture_limit" in error for error in validate(data))
+    slide.update(
+        url="https://example.com", viewport="1440x1000", screenshot="desktop.png",
+        capture_date="2026-11-27", verification_method="browser",
+    )
+    slide["mobile_capture"] = {
+        "url": "https://example.com", "viewport": "390x844", "screenshot": "mobile.png",
+        "capture_date": "2026-11-27", "verification_method": "browser",
+        "screenshot_dimensions": {"width": 390, "height": 844},
+    }
+    finding["x_percent"] = finding["y_percent"] = None
+    finding["mobile_pin"] = {"x_percent": 20, "y_percent": 30}
+    assert validate(data) == []
+    finding["mobile_pin"]["x_percent"] = 101
+    assert any("mobile_pin" in error for error in validate(data))
+    finding["mobile_pin"]["x_percent"] = 20
+    core_ux = data["frameworks"]["core-ux"]
+    core_ux.update(parameter_source="Supplied parameters", parameter_codes=["UX-01"])
+    assert any("unknown core-ux code" in error for error in validate(data))
+    finding["framework_results"][0]["code"] = "UX-01"
+    assert validate(data) == []
+    slide["mobile_capture"]["screenshot"] = slide["screenshot"]
+    assert any("distinct screenshots" in error for error in validate(data))
     print("OK: self-test")
     return 0
 

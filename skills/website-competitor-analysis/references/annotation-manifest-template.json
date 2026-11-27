@@ -8,12 +8,15 @@
       "pages": [],
       "journeys": [],
       "viewports": []
-    }
+    },
+    "evidence_format": "paired"
   },
   "frameworks": {
     "core-ux": {
       "state": "not-tested",
-      "limitations": []
+      "limitations": [],
+      "parameter_source": "",
+      "parameter_codes": []
     },
     "wcag-2.2-aa": {
       "state": "not-tested",
@@ -76,9 +79,23 @@
           "evidence_type": "visual",
           "verification_method": "manual screenshot review",
           "source": "",
-          "confidence": "medium"
+          "confidence": "medium",
+          "mobile_pin": null
         }
-      ]
+      ],
+      "mobile_capture": {
+        "url": "",
+        "viewport": "mobile 390x844",
+        "screenshot": "",
+        "screenshot_dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "capture_date": "YYYY-MM-DD",
+        "verification_method": ""
+      },
+      "verification_method": "",
+      "capture_limit": ""
     }
   ],
   "qa": {
@@ -89,7 +106,6 @@
     "all_framework_claims_referenced": false,
     "all_supported_deceptive_patterns_human_verified": false,
     "all_supported_deceptive_patterns_have_remediation": false,
-    "one_screenshot_per_evidence_slide": false,
     "all_pin_placements_render_checked": false
   }
 }

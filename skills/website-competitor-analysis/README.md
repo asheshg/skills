@@ -13,15 +13,10 @@ Competitors are not selected in advance as decoration. A competitor is included 
 
 ## What It Produces
 
-- An executive audit verdict and target weakness map
-- Separate framework definitions, coverage states, findings, and limitations
-- One source screenshot per evidence slide with numbered annotations
-- Conditional competitor benchmarks tied to target findings
-- Prioritized recommendations linked to supported evidence
-- A validated annotation manifest beside the final deliverable
-- A PowerPoint deck, optional PDF export, or HTML deck/report
-
-The skill does not claim site-wide accessibility conformance from partial testing, treat candidate deceptive signals as confirmed findings, or invent behavioral and commercial data.
+- Assessment parameters followed by journey-ordered screen findings.
+- Paired desktop and mobile screenshots with numbered annotations and one shared findings table.
+- An accessibility pass rate and a deceptive-pattern summary before the conditional competitor benchmark.
+- A PowerPoint deck using the supplied template, an agreed PDF or HTML output, and the audit records and manifest.
 
 ## Repository Structure
 
@@ -37,6 +32,7 @@ website-competitor-analysis/
 |   |-- deceptive-pattern-framework.md
 |   |-- fair-pattern-remediation-framework.md
 |   |-- report-template.md
+|   |-- step-by-step-review.md
 |   `-- wcag-accessibility-framework.md
 `-- scripts/
     `-- validate_manifest.py
@@ -87,7 +83,7 @@ For a project-scoped installation, place the directory at:
 
 Claude.ai and Claude API installations are managed separately from Claude Code. Package the complete directory for upload through the relevant custom Skills interface. Custom Skills do not automatically synchronize across Claude surfaces. See the [Anthropic Agent Skills documentation](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview).
 
-Claude runtimes may expose different browser, presentation, PDF, network, and package capabilities. The skill's fallback matrix requires those differences to be disclosed rather than silently weakening the audit.
+Claude runtimes may expose different browser, presentation, PDF, network, and package capabilities. The skill's fallback instructions requires those differences to be disclosed rather than silently weakening the audit.
 
 ## Invocation
 

@@ -1,137 +1,15 @@
-# Audit Deck Template
+# Assessment deck
 
-Use this as the client-facing structure. Keep format decisions and internal process metadata out of the deck.
+Follow the Tata CLiQ website section for structure and tables. For PowerPoint, open the supplied Space10 file as the source presentation. Start with the closest original example slide for each role and replace content in place. Keep its master and layout visible, with the original font family, type hierarchy, palette, margins, table style and image treatment. Replace visible template branding with the requested owner name. Adapt only the space needed for the audit content and remove unused example slides. Compare the rendered deck with the corresponding originals before delivery.
 
-## Required Sequence
+1. Cover with the audited website name and domain, assessment title and date.
+2. Table of contents on the next slide. Use the Space10 contents example. List the sections actually present in their final order with accurate slide numbers or ranges.
+3. Assessment parameters. Always reproduce both complete [Tata CLiQ tables](core-ux-framework.md#canonical-parameters) with all 32 rows, in order. Keep the four original headers, wording and grouped area cells. Use the Space10 table treatment, a wide table and readable body text. Use the two source splits as the baseline and add a continuation only if needed for legibility.
+4. Workflow evidence in journey order. Highlight the current stage and place paired desktop/mobile screenshots beside one shared table. Use **No**, **Pain Point**, **Description**, **Experience Assessment Parameter** in that order. Use short, concrete descriptions and cite applicable parameter codes in the final column. Keep device and source details with the evidence. Keep WCAG criteria and deceptive-pattern taxonomy IDs in their summaries or linked test records. Numbered pins match the rows. Skip screens with no findings. If one capture is blocked, state the gap and use the verified capture. For requested competitor evidence, use **No**, **What’s working**, **Why**.
+5. **Accessibility Pass Rate**. Put the pass rate, coverage and supporting explanation on the left, with an annotated image of an observed accessibility issue on the right when a capture can substantiate it. Give the image a caption with its criterion and evidence reference. If the issue is non-visual, use a faithful capture of the relevant test output or DOM evidence. Keep the scope, status counts and methods visible, and compute the figures using the WCAG reference.
+6. **Deceptive-Pattern Summary**. Use **What we checked**, **What we found** and **Scope limits** as bold headings. Keep body text distinct from the headings. Cover the decisions checked, human-confirmed findings and linked remedies, and describe what remains untested. Include supporting images when they substantiate or clarify the finding or choice, such as captures of two states in a pricing flow.
+7. Conditional competitor benchmark. Benchmark only a supported weakness on the same task and stage. End with the last substantive slide and omit the standalone name or wordmark slide.
 
-1. Cover: target, audit scope, date.
-2. Executive audit verdict: strongest evidence-backed gaps and priorities.
-3. Framework map: purpose, source, scope, and execution state for Core UX, WCAG 2.2, Deceptive Patterns, and Fair Patterns.
-4. Core UX definitions: canonical parameters used in the audit. Detailed decks show the complete registry across as many template layouts as needed.
-5. Core UX coverage and target weakness map.
-6. Core UX evidence slides.
-7. WCAG 2.2 definition and claim limits.
-8. WCAG coverage: pages/processes, methods, and criterion counts by status.
-9. WCAG evidence slides.
-10. Deceptive Patterns definition and canonical taxonomy.
-11. Deceptive Patterns coverage: choice sets/journeys tested and findings by status.
-12. Deceptive-pattern evidence slides.
-13. Fair Patterns remediation, only for supported deceptive findings. Otherwise show `not invoked` on the framework map and omit this chapter.
-14. Consolidated target gaps.
-15. Conditional gap-to-benchmark matrix.
-16. Competitor evidence slides, only where a competitor is better on the same task and journey stage.
-17. Prioritized recommendations.
-18. Sources and limitations.
+For every audit image, use a thin template-compatible neutral stroke and subtle drop shadow so it remains distinguishable from the canvas. Use square corners on screenshots and keep the effects outside the evidence. Use visible light-grey borders on all table cells, including internal rules.
 
-## Framework Map
-
-| Framework | Purpose | Source | Scope | State | Limitation |
-|---|---|---|---|---|---|
-
-Allowed diagnostic states: `tested-with-findings`, `tested-no-supported-findings`, `partially-tested`, and `not-tested`. Fair Patterns may use `not-invoked`.
-
-Do not omit a diagnostic framework because it has no findings. Its state and limitations remain visible.
-
-## Core UX Chapter
-
-Use only codes from `core-ux-framework.md`.
-
-| Code | Parameter | Definition | What good looks like | Common failure | Nielsen heuristic |
-|---|---|---|---|---|---|
-
-| Code | Target evidence | Score | Severity | User/task impact |
-|---|---|---:|---|---|
-
-## WCAG Chapter
-
-Use criterion statuses instead of 1-5 scoring.
-
-| Criterion | Level | Status | Page/process | Method | Evidence | Recommendation | Reference |
-|---|---|---|---|---|---|---|---|
-
-Always state that observed passes apply only to the tested state and method. Never use site-wide conformance language for partial coverage.
-
-## Deceptive Patterns Chapter
-
-| Canonical ID | Pattern | Status | Choice set/journey | Signals | Counter-evidence | User harm | Human verified | Reference |
-|---|---|---|---|---|---|---|---|---|
-
-Do not present `candidate` signals as definitive findings.
-
-## Fair Patterns Chapter
-
-| Linked finding | Fair Pattern | Replacement behavior | Why it restores autonomy | Constraint | Success evidence | Reference |
-|---|---|---|---|---|---|---|
-
-## Gap-To-Benchmark Chapter
-
-| Target code/finding | Target evidence | Competitor | Same task and stage | Better evidence | Transferable pattern | Recommendation |
-|---|---|---|---|---|---|---|
-
-If no supported competitor benchmark exists, say so in the matrix and omit the evidence slide.
-
-## Evidence Slide Contract
-
-Every evidence slide uses one source screenshot and one findings table.
-
-```text
-Title:
-Framework and state:
-Screenshot:
-Viewport:
-Journey stage:
-Pin number:
-Finding:
-Evidence:
-Framework code/result:
-User harm:
-Recommendation:
-Source:
-```
-
-Required table columns: `No`, `Finding`, `Evidence`, `Framework`, `Recommendation`, `Source`.
-
-- Put only numbered rounded pins on target screenshots.
-- Do not add highlight boxes, callout rectangles, or paragraph overlays.
-- Keep explanatory text outside the screenshot.
-- Pins and rows must be generated from the validated annotation manifest.
-- Check placement in the rendered artifact and update `placement_verified`.
-
-## PPT Requirements
-
-- Start from the user's supplied PowerPoint template.
-- Create slides only from existing template layouts and preserve its masters.
-- Remove source example slides and source-brand references.
-- Do not create custom audit layouts, a `.potx`, or a separate audit template.
-- Use Helvetica Neue Regular only; no italics.
-- Respect layout text limits and split dense chapters across additional existing layouts.
-- Do not include a method slide.
-
-## HTML Requirements
-
-- Use a landscape presentation viewport.
-- Use the same deck order and evidence-slide contract as PPT.
-- Use exactly one `<img>` screenshot on each evidence slide.
-- Keep framework and summary slides text-only when no screenshot is needed.
-
-## Recommendations
-
-Group recommendations into immediate fixes, structural improvements, and experiments. Every recommendation must link to a supported target finding.
-
-## Deck QA
-
-- Framework definitions precede their findings.
-- Every framework has an explicit state and source.
-- Every code resolves to one definition.
-- Every evidence slide has one screenshot.
-- Every annotation exists in the validated manifest.
-- Every pin matches its table row and visible UI element.
-- Every source names page, viewport, capture date, and method.
-- Every WCAG result includes criterion, level, status, method, and W3C reference.
-- Every supported deceptive result is human-verified and has Fair Pattern remediation.
-- Every competitor slide maps to the same target task and journey stage.
-- Rendered slides have no clipped text, overlaps, missing sources, or misplaced pins.
-
-## Sources
-
-List audited URLs, capture dates, viewports, test methods, framework references, blocked states, assumptions, and evidence limits.
+Before placing any claim in the deck, verify it against the underlying evidence for the exact page, state and scope. Check the actual interaction or measurement when a screenshot alone cannot substantiate the claim. Recalculate figures from the test records and carry the same verified wording into headings, summaries, captions and recommendations. Leave unsupported claims out of the deck. Disclose observed risks and test limits with the evidence that supports those narrower statements. Keep the test records with the manifest. Keep pending deceptive-pattern signals in the test record. The summary reports the verified findings and the limits of the review. Inspect every rendered slide for readable type, complete tables, visible sources and accurate pins. Split dense evidence across existing Space10 layouts and keep the workflow order and table headers.
