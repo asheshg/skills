@@ -1,4 +1,4 @@
-"""Validate an audit annotation manifest before deck rendering."""
+"""Validate an audit evidence record or legacy slide manifest."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ FRAMEWORK_STATES = {
     "partially-tested",
     "not-tested",
 }
+AUDIT_FRAMEWORKS = {"core-ux", "wcag-2.2-aa", "deceptive-patterns"}
 SCREENSHOT_ROLES = {"target-gap", "competitor-benchmark", "recommendation", "source"}
 
 
@@ -49,11 +50,30 @@ def valid_coordinates(pin: dict) -> bool:
 def validate(data: dict) -> list[str]:
     errors: list[str] = []
     codes = registry()
+    audit = data.get("audit", {})
     frameworks = data.get("frameworks", {})
-    for name in ("core-ux", "wcag-2.2-aa", "deceptive-patterns"):
+    audit_record = "evidence" in data
+    selected = AUDIT_FRAMEWORKS
+    if audit_record:
+        requested = audit.get("selected_frameworks")
+        if (
+            isinstance(requested, list) and requested
+            and all(isinstance(name, str) and name in AUDIT_FRAMEWORKS for name in requested)
+            and len(set(requested)) == len(requested)
+        ):
+            selected = set(requested)
+        else:
+            errors.append("audit.selected_frameworks must contain distinct recognized framework IDs")
+        if not audit.get("test_record"):
+            errors.append("audit.test_record must link to the test log")
+        if "slides" in data:
+            errors.append("keep deck placement separate from the audit evidence record")
+    for name in sorted(AUDIT_FRAMEWORKS):
         state = frameworks.get(name, {}).get("state")
         if state not in FRAMEWORK_STATES:
             errors.append(f"frameworks.{name}.state is invalid: {state!r}")
+        elif name not in selected and state != "not-tested":
+            errors.append(f"frameworks.{name} was not selected and must be not-tested")
     core_ux = frameworks.get("core-ux", {})
     parameter_codes = core_ux.get("parameter_codes", [])
     parameter_source = core_ux.get("parameter_source", "")
@@ -70,12 +90,25 @@ def validate(data: dict) -> list[str]:
     if fair_state not in FRAMEWORK_STATES | {"not-invoked"}:
         errors.append(f"frameworks.fair-patterns.state is invalid: {fair_state!r}")
 
-    slides = data.get("slides", [])
-    paired = data.get("audit", {}).get("evidence_format") == "paired"
-    if not slides and not paired:
+    if "deceptive-patterns" not in selected and fair_state != "not-invoked":
+        errors.append("fair-patterns requires a deceptive-pattern audit")
+
+    items = data.get("evidence" if audit_record else "slides", [])
+    if not isinstance(items, list):
+        return errors + ["evidence or slides must be a list"]
+    paired = audit_record or audit.get("evidence_format") == "paired"
+    if not items and not paired:
         errors.append("slides must contain at least one evidence slide")
-    for slide in slides:
+    evidence_ids: set[str] = set()
+    for slide in items:
         label = f"slide {slide.get('slide', '?')}"
+        if audit_record:
+            evidence_id = slide.get("evidence_id")
+            label = f"evidence {evidence_id!r}"
+            if not isinstance(evidence_id, str) or not evidence_id.strip() or evidence_id in evidence_ids:
+                errors.append(f"{label}: evidence_id must be unique and nonempty")
+            else:
+                evidence_ids.add(evidence_id)
         if slide.get("screenshot_role") not in SCREENSHOT_ROLES:
             errors.append(f"{label}: invalid screenshot_role")
         if not valid_dimensions(slide):
@@ -126,9 +159,11 @@ def validate(data: dict) -> list[str]:
             for result in framework_results:
                 framework = result.get("framework")
                 code = result.get("code")
-                if framework not in ("core-ux", "wcag-2.2-aa", "deceptive-patterns"):
+                if framework not in AUDIT_FRAMEWORKS:
                     errors.append(f"{prefix}: unknown framework {framework!r}")
                     continue
+                if framework not in selected:
+                    errors.append(f"{prefix}: result from unselected framework {framework!r}")
                 if code not in codes[framework]:
                     errors.append(f"{prefix}: unknown {framework} code {code!r}")
                 if framework in ("wcag-2.2-aa", "deceptive-patterns") and not result.get("reference"):
@@ -224,6 +259,44 @@ def self_test() -> int:
     assert validate(data) == []
     slide["mobile_capture"]["screenshot"] = slide["screenshot"]
     assert any("distinct screenshots" in error for error in validate(data))
+    del slide["mobile_capture"]
+    slide["capture_limit"] = "Desktop-only scope"
+    finding["mobile_pin"] = None
+    finding["x_percent"] = finding["y_percent"] = 50
+    slide["evidence_id"] = "E01"
+    data["evidence"] = data.pop("slides")
+    results = {
+        result["framework"]: result for result in finding["framework_results"]
+    }
+    results["wcag-2.2-aa"] = {
+        "framework": "wcag-2.2-aa", "code": "1.4.10", "result": "risk",
+        "reference": "W3C Reflow", "verification_method": "viewport measurement",
+    }
+    for selection in ([name] for name in sorted(AUDIT_FRAMEWORKS)):
+        data["audit"] = {
+            "selected_frameworks": selection, "test_record": "test-log.md",
+            "output_format": "audit-only",
+        }
+        for name in AUDIT_FRAMEWORKS:
+            data["frameworks"][name]["state"] = "partially-tested" if name in selection else "not-tested"
+        deceptive = "deceptive-patterns" in selection
+        data["frameworks"]["fair-patterns"]["state"] = "tested-with-findings" if deceptive else "not-invoked"
+        finding["remediations"] = [{"code": "FP-02"}] if deceptive else []
+        finding["framework_results"] = [results[name] for name in selection]
+        assert validate(data) == []
+        finding["framework_results"] = list(results.values())
+        assert any("unselected framework" in error for error in validate(data))
+
+    data["audit"].update(selected_frameworks=sorted(AUDIT_FRAMEWORKS), output_format="PowerPoint")
+    for name in AUDIT_FRAMEWORKS:
+        data["frameworks"][name]["state"] = "partially-tested"
+    data["frameworks"]["fair-patterns"]["state"] = "tested-with-findings"
+    finding["remediations"] = [{"code": "FP-02"}]
+    assert validate(data) == []
+    data["evidence"].append(slide)
+    assert any("evidence_id" in error for error in validate(data))
+    data["evidence"] = []
+    assert validate(data) == []
     print("OK: self-test")
     return 0
 

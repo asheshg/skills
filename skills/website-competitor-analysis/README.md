@@ -11,6 +11,10 @@ The skill keeps four assessment layers distinct:
 
 Competitors are not selected in advance as decoration. A competitor is included only when captured evidence shows that it handles the same task and journey stage better than the target site.
 
+## Select an audit and an output
+
+Choose any combination of UX heuristics, accessibility and deceptive-pattern checks. Audit-only runs save a local findings report, test log and reusable evidence record. For example, ask for an accessibility-only audit of mobile checkout and say to skip the deck. Request a PowerPoint deck to export the evidence into PowerPoint, or use the combined workflow for the full assessment. Before building a deck, the skill asks whether to include all verified findings or only the IDs you select.
+
 ## What It Produces
 
 - Assessment parameters followed by journey-ordered screen findings.

@@ -19,7 +19,7 @@ Run `python -m unittest discover -s tests -v` from the repository root. Nine reg
 
 ## Assets and provenance
 
-All six assets passed full ZIP/XML/relationship inspection. All 317 slides exported in native PowerPoint with macros disabled and rasterized successfully; contact sheets revealed original SPACE10 artwork. The owner confirmed permission to retain and redistribute the assets. They are now described as retained branded references, not fully neutralized. See [ASSET-REVIEW.md](ASSET-REVIEW.md) for hashes, counts and boundaries.
+All six assets passed full ZIP/XML/relationship inspection. All 317 slides exported in native PowerPoint with macros disabled and rasterized successfully; contact sheets revealed original source artwork. The owner confirmed permission to retain and redistribute the assets. They are now described as retained branded references, not fully neutralized. See [ASSET-REVIEW.md](ASSET-REVIEW.md) for hashes, counts and boundaries.
 
 ## Scanner history and limits
 

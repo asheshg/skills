@@ -35,4 +35,4 @@ The references contain distilled book concepts. Full books and fonts are not dis
 
 ## Retained asset provenance
 
-The six editorial assets retain original SPACE10 artwork, even where text naming was substituted. The repository owner confirmed permission to redistribute them on 2026-11-21. They are not fully brand-neutral. Do not describe string replacement as removal of logos, images, or third-party rights. Use only layouts appropriate to the requested brand and visually review inherited artwork. See [asset review](../ASSET-REVIEW.md).
+The two presentation templates use a generic wordmark. The editorial assets may still contain source imagery or sample photography. The repository owner confirmed permission to redistribute them on 2026-11-21. They are not fully brand-neutral. Do not describe string replacement as removal of logos, images, or third-party rights. Use only layouts appropriate to the requested brand and visually review inherited artwork. See [asset review](../ASSET-REVIEW.md).

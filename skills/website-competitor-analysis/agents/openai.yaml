@@ -1,4 +1,4 @@
 interface:
   display_name: "Website Audit and Competitor Benchmark"
   short_description: "Evidence-led UX, WCAG, and deceptive-pattern audits"
-  default_prompt: "Use $website-competitor-analysis to walk the target site screen by screen on desktop and mobile. Use the supplied Space10 template, Tata CLiQ tables, and scoped accessibility and deceptive-pattern summaries."
+  default_prompt: "Use $website-competitor-analysis to audit the target site. Select UX heuristics, accessibility, deceptive patterns, or a combination. Save the audit and evidence locally, and generate a PowerPoint deck only if requested."

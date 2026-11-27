@@ -3,13 +3,19 @@
     "target_site": "",
     "target_url": "",
     "capture_date": "YYYY-MM-DD",
-    "output_format": "HTML deck/report",
+    "output_format": "audit-only",
     "scope": {
       "pages": [],
       "journeys": [],
       "viewports": []
     },
-    "evidence_format": "paired"
+    "evidence_format": "paired",
+    "selected_frameworks": [
+      "core-ux",
+      "wcag-2.2-aa",
+      "deceptive-patterns"
+    ],
+    "test_record": ""
   },
   "frameworks": {
     "core-ux": {
@@ -33,9 +39,17 @@
       "limitations": []
     }
   },
-  "slides": [
+  "qa": {
+    "all_framework_states_reported": false,
+    "all_competitor_findings_map_to_target_gaps": false,
+    "all_pins_match_table_rows": false,
+    "all_sources_visible": false,
+    "all_framework_claims_referenced": false,
+    "all_supported_deceptive_patterns_human_verified": false,
+    "all_supported_deceptive_patterns_have_remediation": false
+  },
+  "evidence": [
     {
-      "slide": 1,
       "title": "",
       "site": "",
       "url": "",
@@ -48,7 +62,6 @@
         "height": 0
       },
       "capture_date": "YYYY-MM-DD",
-      "placement_verified": false,
       "findings": [
         {
           "pin": 1,
@@ -72,7 +85,7 @@
               "evidence_type": "visual",
               "verification_method": "manual screenshot review",
               "reference": "",
-              "verified_by_human": true
+              "verified_by_human": false
             }
           ],
           "remediations": [],
@@ -95,17 +108,8 @@
         "verification_method": ""
       },
       "verification_method": "",
-      "capture_limit": ""
+      "capture_limit": "",
+      "evidence_id": "E01"
     }
-  ],
-  "qa": {
-    "all_framework_states_reported": false,
-    "all_competitor_findings_map_to_target_gaps": false,
-    "all_pins_match_table_rows": false,
-    "all_sources_visible": false,
-    "all_framework_claims_referenced": false,
-    "all_supported_deceptive_patterns_human_verified": false,
-    "all_supported_deceptive_patterns_have_remediation": false,
-    "all_pin_placements_render_checked": false
-  }
+  ]
 }
